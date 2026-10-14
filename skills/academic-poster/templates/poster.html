@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{SHORT_NAME}} poster</title>
+<style>
+  /* ==== Poster size: set from the venue's call for posters ====
+     --w-in / --h-in are unitless inches. Render with:
+     python render.py poster.html poster.pdf --pdf --width-in 48 --height-in 36  */
+  :root {
+    --w-in: 48;
+    --h-in: 36;
+    --accent: #2f5bd3;
+    --accent-soft: #e8eefc;
+    --ink: #1a1a1a;
+    --muted: #555;
+    --line: #d9d9d9;
+    --bg: #ffffff;
+    --cols: 3;
+  }
+  @page { size: calc(var(--w-in) * 1in) calc(var(--h-in) * 1in); margin: 0; }
+  * { box-sizing: border-box; }
+  html { font-size: calc(var(--w-in) * 0.9px); } /* 48in wide -> ~43px (~32pt) body text */
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    width: calc(var(--w-in) * 1in); height: calc(var(--h-in) * 1in);
+    font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    line-height: 1.35; display: flex; flex-direction: column; overflow: hidden;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  header {
+    display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center;
+    padding: 1.6rem 2.2rem; background: var(--accent); color: #fff;
+  }
+  h1 { font-size: 2.7rem; line-height: 1.1; margin: 0 0 .6rem; letter-spacing: -.01em; }
+  h1 .short { opacity: .85; }
+  .authors { font-size: 1.05rem; margin: 0; }
+  .affils { font-size: .85rem; margin: .35rem 0 0; opacity: .9; }
+  .head-right { display: flex; align-items: center; gap: 1.4rem; }
+  .logos img { height: 3.2rem; background: #fff; border-radius: .3rem; padding: .3rem; }
+  .qr { text-align: center; font-size: .6rem; }
+  .qr img { width: 5.2rem; height: 5.2rem; display: block; background: #fff; padding: .25rem; border-radius: .3rem; }
+  .tldr {
+    margin: 1.2rem 2.2rem 0; padding: .8rem 1.2rem; background: var(--accent-soft);
+    border-left: .35rem solid var(--accent); font-size: 1.25rem; font-weight: 600; border-radius: .3rem;
+  }
+  main {
+    flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(var(--cols), 1fr);
+    gap: 1.6rem; padding: 1.2rem 2.2rem;
+  }
+  .col { display: flex; flex-direction: column; gap: 1.2rem; min-height: 0; }
+  .box { border: .08rem solid var(--line); border-radius: .4rem; padding: 1rem 1.2rem; }
+  .box.grow { flex: 1; }
+  h2 {
+    font-size: 1.45rem; margin: 0 0 .6rem; color: var(--accent);
+    border-bottom: .08rem solid var(--line); padding-bottom: .3rem;
+  }
+  p { margin: 0 0 .6rem; }
+  ul { margin: 0 0 .6rem; padding-left: 1.2rem; }
+  li { margin-bottom: .35rem; }
+  img.fig { width: 100%; height: auto; display: block; border-radius: .25rem; }
+  .cap { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+  .big { font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; text-align: center; }
+  .stats .lbl { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+  footer {
+    display: flex; justify-content: space-between; padding: .7rem 2.2rem; font-size: .7rem;
+    color: var(--muted); border-top: .08rem solid var(--line);
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1><span class="short">{{SHORT_NAME}}:</span> {{TITLE_REST}}</h1>
+    <p class="authors">{{AUTHORS_WITH_SUPERSCRIPTS}}</p>
+    <p class="affils">{{AFFILIATIONS}}</p>
+  </div>
+  <div class="head-right">
+    <div class="logos"><!-- <img src="logo-univ.png"> --></div>
+    <div class="qr"><img src="qr.png" alt="QR to project page">Project page</div>
+  </div>
+</header>
+
+<div class="tldr">{{TLDR_ONE_SENTENCE}}</div>
+
+<main>
+  <div class="col">
+    <div class="box">
+      <h2>Motivation</h2>
+      <!-- problem in 2–3 bullets; the gap in existing methods -->
+      <ul><li>{{…}}</li></ul>
+    </div>
+    <div class="box grow">
+      <h2>Key Idea</h2>
+      <img class="fig" src="fig-teaser.png" alt="">
+      <p class="cap">{{CAPTION}}</p>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="box grow">
+      <h2>Method</h2>
+      <img class="fig" src="fig-method.png" alt="">
+      <p class="cap">{{CAPTION}}</p>
+      <ul><li>{{…}}</li></ul>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="box">
+      <h2>Results</h2>
+      <div class="stats">
+        <div><div class="big">{{NUM1}}</div><div class="lbl">{{NUM1_LABEL}}</div></div>
+        <div><div class="big">{{NUM2}}</div><div class="lbl">{{NUM2_LABEL}}</div></div>
+        <div><div class="big">{{NUM3}}</div><div class="lbl">{{NUM3_LABEL}}</div></div>
+      </div>
+    </div>
+    <div class="box grow">
+      <img class="fig" src="fig-result.png" alt="">
+      <p class="cap">{{CAPTION}}</p>
+    </div>
+    <div class="box">
+      <h2>Takeaways</h2>
+      <ul><li>{{…}}</li></ul>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>{{PAGE_URL}} · {{CODE_URL}}</span>
+  <span>{{CONTACT_EMAIL}}</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>xhs cards</title>
+<!--
+  每个 <section class="card"> = 一张 1080x1440 的图。渲染：
+  python render.py cards.html cards/ --selector .card --width 1080
+  输出 cards/01.png, 02.png ...（按页面顺序）
+  所有示例文字都要替换；数字只能来自 brief.md。
+-->
+<style>
+  :root {
+    --paper: #fbf6ee;      /* 卡片底色 */
+    --ink: #161513;
+    --muted: #6e675c;
+    --hl: #ffd84d;         /* 高亮马克笔色 */
+    --accent: #e8503a;     /* 强调色（数字、页码） */
+    --frame: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #888; width: 1080px;
+    font-family: "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    color: var(--ink);
+  }
+  .card {
+    width: 1080px; height: 1440px; background: var(--paper); position: relative; overflow: hidden;
+    padding: 96px 84px 84px; display: flex; flex-direction: column;
+  }
+  .card + .card { margin-top: 20px; }
+  mark { background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 92%, transparent 92%); color: inherit; padding: 0 4px; }
+  .tag {
+    align-self: flex-start; font-size: 34px; font-weight: 700; padding: 10px 26px;
+    background: var(--ink); color: var(--paper); border-radius: 999px;
+  }
+  .pageno { position: absolute; top: 96px; right: 84px; font-size: 34px; font-weight: 700; color: var(--accent); }
+  .frame { background: var(--frame); border-radius: 28px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,.08); }
+  .frame img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 12px; }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; font-size: 30px; color: var(--muted); }
+
+  /* ---- 封面 ---- */
+  .cover h1 { font-size: 118px; line-height: 1.22; font-weight: 900; margin: 56px 0 28px; letter-spacing: -.01em; }
+  .cover .sub { font-size: 44px; line-height: 1.45; color: var(--muted); font-weight: 600; }
+  .cover .frame { margin-top: 48px; flex: 1; min-height: 0; }
+
+  /* ---- 观点卡 ---- */
+  .point h2 { font-size: 76px; line-height: 1.3; font-weight: 900; margin: 64px 0 40px; }
+  .point .frame { flex: 1; min-height: 0; max-height: 640px; }
+  .point ul { list-style: none; margin-top: 44px; }
+  .point li { font-size: 44px; line-height: 1.55; margin-bottom: 18px; padding-left: 58px; position: relative; }
+  .point li::before { content: "▸"; position: absolute; left: 6px; color: var(--accent); }
+  .point p { font-size: 44px; line-height: 1.6; margin-top: 40px; }
+
+  /* ---- 数字卡 ---- */
+  .number h2 { font-size: 72px; line-height: 1.3; font-weight: 900; margin: 64px 0 24px; }
+  .number .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 24px 0 40px; }
+  .number .stat { background: var(--frame); border-radius: 24px; padding: 32px 30px; }
+  .number .big { font-size: 112px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .number .lbl { font-size: 36px; color: var(--muted); margin-top: 16px; line-height: 1.4; }
+  .number .frame { flex: 1; min-height: 0; }
+
+  /* ---- 信息卡（最后一张） ---- */
+  .info h2 { font-size: 76px; font-weight: 900; margin: 64px 0 48px; }
+  .info dl { font-size: 42px; line-height: 1.5; }
+  .info dt { color: var(--muted); font-size: 34px; margin-top: 34px; }
+  .info dd { font-weight: 700; word-break: break-word; }
+  .info .ask { margin-top: auto; background: var(--hl); border-radius: 24px; padding: 34px 40px; font-size: 44px; font-weight: 700; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- 1. 封面：≤15 字大标题，关键词用 <mark> -->
+<section class="card cover">
+  <div class="tag">AI 论文分享</div>
+  <h1>让大模型<br><mark>少算 4 倍</mark><br>效果不打折</h1>
+  <div class="sub">我们 NeurIPS 2026 的新工作</div>
+  <div class="frame"><img src="figs/teaser.png" alt=""></div>
+</section>
+
+<!-- 2. 观点卡：一张卡只讲一件事 -->
+<section class="card point">
+  <div class="tag">一句话看懂</div>
+  <div class="pageno">02</div>
+  <h2>大模型回答问题时，<br>其实<mark>大部分计算是浪费的</mark></h2>
+  <div class="frame"><img src="figs/method.png" alt=""></div>
+  <ul>
+    <li>简单的词不需要动用整个模型</li>
+    <li>我们让模型自己判断"该用多少力气"</li>
+  </ul>
+</section>
+
+<!-- 3. 数字卡：数字必须与 brief 完全一致 -->
+<section class="card number">
+  <div class="tag">效果</div>
+  <div class="pageno">03</div>
+  <h2>在 6 个测试集上</h2>
+  <div class="stats">
+    <div class="stat"><div class="big">4.2×</div><div class="lbl">计算量减少</div></div>
+    <div class="stat"><div class="big">−0.3</div><div class="lbl">平均准确率变化（几乎不变）</div></div>
+  </div>
+  <div class="frame"><img src="figs/result.png" alt=""></div>
+</section>
+
+<!-- 最后一张：信息卡。不放链接/二维码，让人"搜" -->
+<section class="card info">
+  <div class="tag">论文信息</div>
+  <h2>想看原文？</h2>
+  <dl>
+    <dt>论文</dt><dd>NAME: Full Paper Title Goes Here</dd>
+    <dt>会议</dt><dd>NeurIPS 2026</dd>
+    <dt>arXiv 编号</dt><dd>2610.01234</dd>
+    <dt>代码</dt><dd>GitHub 搜索「NAME」</dd>
+  </dl>
+  <div class="ask">💬 你觉得还有哪些场景<br>可以让 AI "少用点力气"？</div>
+</section>
+
+</body>
+</html>

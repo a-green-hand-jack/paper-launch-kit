@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{SHORT_NAME}}: {{TITLE_REST}}</title>
+<meta name="description" content="{{TLDR_EN}}">
+<!-- Link previews on X / Slack / WeChat. og:image MUST be an absolute URL, 1200x630 recommended. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{SHORT_NAME}}: {{TITLE_REST}}">
+<meta property="og:description" content="{{TLDR_EN}}">
+<meta property="og:image" content="{{PAGE_URL}}static/og.png">
+<meta property="og:url" content="{{PAGE_URL}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{SHORT_NAME}}: {{TITLE_REST}}">
+<meta name="twitter:description" content="{{TLDR_EN}}">
+<meta name="twitter:image" content="{{PAGE_URL}}static/og.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --ink: #1c1b19;
+    --muted: #6b675f;
+    --line: #e6e2d9;
+    --card: #ffffff;
+    --accent: #2f5bd3;       /* change per project */
+    --accent-ink: #ffffff;
+    --code-bg: #f3f1ec;
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141413; --ink: #ecebe7; --muted: #a29f97; --line: #2c2b28;
+      --card: #1c1b19; --accent: #7c9cff; --accent-ink: #0d0d0c; --code-bg: #22211f;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+  header { padding: 64px 0 28px; text-align: center; }
+  .venue {
+    display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--accent); border: 1px solid currentColor;
+    border-radius: 999px; padding: 3px 12px; margin-bottom: 18px;
+  }
+  h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 18px; letter-spacing: -.01em; }
+  h1 .short { color: var(--accent); }
+  .authors { font-size: 17px; margin: 0 0 6px; }
+  .authors span { white-space: nowrap; margin: 0 8px; }
+  .affils { color: var(--muted); font-size: 15px; margin: 0 0 6px; }
+  .note { color: var(--muted); font-size: 13px; }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 24px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px;
+    background: var(--ink); color: var(--bg); border-radius: 999px; font-weight: 600; font-size: 15px;
+  }
+  .btn:hover { text-decoration: none; opacity: .88; }
+  .btn svg { width: 17px; height: 17px; fill: currentColor; }
+  figure { margin: 0; }
+  .teaser { margin: 28px 0 8px; }
+  .teaser img, section img { width: 100%; height: auto; display: block; border-radius: 10px; background: var(--card); }
+  figcaption { color: var(--muted); font-size: 14.5px; margin-top: 10px; text-align: center; }
+  .tldr {
+    margin: 36px 0; padding: 20px 24px; background: var(--card); border: 1px solid var(--line);
+    border-left: 4px solid var(--accent); border-radius: 10px; font-size: 18px;
+  }
+  .tldr b { color: var(--accent); }
+  section { padding: 28px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 26px; margin: 0 0 16px; }
+  .abstract p { text-align: justify; hyphens: auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  .stat .num { font-size: 32px; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .stat .lbl { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
+  .video { position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; }
+  .video iframe, .video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  pre {
+    background: var(--code-bg); border-radius: 10px; padding: 18px; overflow-x: auto;
+    font: 13.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0;
+  }
+  .bib { position: relative; }
+  .copy {
+    position: absolute; top: 10px; right: 10px; font: 600 13px/1 inherit; padding: 7px 12px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; cursor: pointer;
+  }
+  footer { color: var(--muted); font-size: 13.5px; text-align: center; padding: 36px 0 48px; border-top: 1px solid var(--line); }
+  @media (max-width: 600px) {
+    header { padding-top: 40px; }
+    body { font-size: 16px; }
+    .tldr { font-size: 16.5px; padding: 16px 18px; }
+    .abstract p { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <!-- Remove the venue badge while under review -->
+  <div class="venue">{{VENUE}}</div>
+  <h1><span class="short">{{SHORT_NAME}}</span>: {{TITLE_REST}}</h1>
+  <p class="authors">
+    <!-- one <span> per author; superscripts = affiliations; * = equal contribution -->
+    <span><a href="{{AUTHOR1_URL}}">{{AUTHOR1}}</a><sup>1*</sup></span>
+    <span><a href="{{AUTHOR2_URL}}">{{AUTHOR2}}</a><sup>1*</sup></span>
+    <span><a href="{{AUTHOR3_URL}}">{{AUTHOR3}}</a><sup>2</sup></span>
+  </p>
+  <p class="affils"><sup>1</sup>{{AFFIL1}} &nbsp;&nbsp; <sup>2</sup>{{AFFIL2}}</p>
+  <p class="note">*Equal contribution</p>
+
+  <nav class="links">
+    <a class="btn" href="{{PAPER_URL}}">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM8 13h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>Paper</a>
+    <a class="btn" href="{{ARXIV_URL}}">
+      <svg viewBox="0 0 24 24"><path d="M4 3h7l2 3-2 3H4l2-3-2-3zm9 9h7l-2 3 2 3h-7l-2-3 2-3z"/></svg>arXiv</a>
+    <a class="btn" href="{{CODE_URL}}">
+      <svg viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>Code</a>
+    <!-- Optional: Data / Model / Demo / Video buttons, same pattern. Delete any button whose link does not exist yet. -->
+  </nav>
+</header>
+
+<figure class="teaser">
+  <img src="static/teaser.png" alt="{{TEASER_ALT}}">
+  <figcaption>{{TEASER_CAPTION}}</figcaption>
+</figure>
+
+<div class="tldr"><b>TL;DR</b> — {{TLDR_EN}}</div>
+
+<section class="abstract">
+  <h2>Abstract</h2>
+  <p>{{ABSTRACT}}</p>
+</section>
+
+<section>
+  <h2>Method</h2>
+  <figure>
+    <img src="static/method.png" alt="{{METHOD_ALT}}">
+    <figcaption>{{METHOD_CAPTION}}</figcaption>
+  </figure>
+  <p>{{METHOD_TEXT}}</p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <!-- 2–3 headline numbers from brief.md; each must match the paper exactly -->
+  <div class="grid">
+    <div class="stat"><div class="num">{{NUM1}}</div><div class="lbl">{{NUM1_LABEL}}</div></div>
+    <div class="stat"><div class="num">{{NUM2}}</div><div class="lbl">{{NUM2_LABEL}}</div></div>
+    <div class="stat"><div class="num">{{NUM3}}</div><div class="lbl">{{NUM3_LABEL}}</div></div>
+  </div>
+  <figure style="margin-top:22px">
+    <img src="static/result.png" alt="{{RESULT_ALT}}">
+    <figcaption>{{RESULT_CAPTION}}</figcaption>
+  </figure>
+</section>
+
+<!-- Optional video section
+<section>
+  <h2>Video</h2>
+  <div class="video"><iframe src="https://www.youtube.com/embed/ID" allowfullscreen></iframe></div>
+</section>
+-->
+
+<section>
+  <h2>BibTeX</h2>
+  <div class="bib">
+    <button class="copy" onclick="copyBib(this)">Copy</button>
+<pre id="bibtex">{{BIBTEX}}</pre>
+  </div>
+</section>
+
+<footer>
+  {{ACK_LINE}}
+</footer>
+
+</div>
+<script>
+function copyBib(btn) {
+  const text = document.getElementById('bibtex').innerText;
+  const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy', 1500); };
+  if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done).catch(() => {}); }
+}
+</script>
+</body>
+</html>
